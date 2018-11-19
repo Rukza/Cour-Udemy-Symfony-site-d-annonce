@@ -16,17 +16,28 @@ class AppFixtures extends Fixture
         $faker = Factory::create('FR-fr');
         //nous gerons les utilisateurs
         $users = [];
+        $genres = ['male', 'female'];
 
         for($i = 1; $i <= 10; $i++){
 
             $user = new User();
 
-            $user->setFirstName($faker->firstname)
+            $genre = $faker->randomElement($genres);
+            $picture = 'https://randomuser.me/api/portraits';
+            $pictureId = $faker->numberBetween(1, 99). '.jpg';
+
+            //if($genre == "male") $picture = $picture . 'men/' . $pictureId;
+            //else $picture =$picture . 'women/' . $pictureId;
+
+            $picture .= ($genre == 'male' ? 'men/' : 'women/') . $pictureId;
+            
+            $user->setFirstName($faker->firstname($genre))
                  ->setLastName($faker->lastName)
                  ->setEmail($faker->email)
                  ->setIntroduction($faker->sentence())
                  ->setDescription('<p>' . join('</p><p>',$faker->paragraphs(3)) . '</p>')
-                 ->setHash('password');
+                 ->setHash('password')
+                 ->setPicture($picture);
 
 
                 $manager->persist($user);
