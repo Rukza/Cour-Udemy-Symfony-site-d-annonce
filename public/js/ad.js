@@ -1,28 +1,3 @@
-{% extends 'base.html.twig'%}
-
-{% block title%}Création d'une annonce{% endblock %}
-
-{% form_theme form 'ad/_collection.html.twig' %}
-
-{% block body %}
-
-<div class="container">
-    <h1>Créer une nouvelle annonce</h1>
-
-    {{ form_start(form) }}
-
-
-    {{form_widget(form)}}
-    <button type="submit" class="btn btn-primary">Créer la nouvelle annonce</button>
-    {{ form_end(form) }}
-
-</div>
-{% endblock %}
-
-
-{% block javascripts %}
-
-<script>
     $('#add-image').click(function (){
         //je récupére le numéro des futurs champs que je vais créer
         //const index = $('#ad_images div.form-group').length;
@@ -50,6 +25,11 @@
             $(target).remove();
         });
     }
+
+    function updateCounter(){
+        const count = +$('#ad_images dv.form-group').length;
+        //fonction pour ne pas avoir de bug dans l'ajout/supp de photo 
+        $('#widgets-counter').val(count);
+    }
+    updateCounter();
     handleDeleteButtons();
-</script>
-{% endblock %}
