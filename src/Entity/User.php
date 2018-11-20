@@ -1,17 +1,22 @@
 <?php
-
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HaslifecycleCallbacks()
+ * @UniqueEntity(
+ * fields={"email"},
+ * message="On aime pas trop les emails comme le tien par ici!!!"
+ * )
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -22,21 +27,26 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Assert\Email(message="Avec une email valide cela serais mieux !")
      */
+
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url(message="Url d'avatar merci !")
      */
     private $picture;
 
@@ -47,11 +57,13 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min=10, minMessage="Votre introduction est trop courte")
      */
     private $introduction;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min=100, minMessage="Votre description est trop courte")
      */
     private $description;
 
@@ -65,7 +77,7 @@ class User
      */
     private $ads;
     /**
-     * Permet d'initialiser el slug
+     * Permet d'initialiser le slug
      * @ORM\PrePersist
      * @ORM\PreUpdate
      * 
@@ -213,5 +225,21 @@ class User
         }
 
         return $this;
+    }
+    public function getRoles()
+         {
+             return array('ROLE_USER');
+         }
+    public function getPassword(){
+        return $this->hash;
+    }
+    public function getSalt(){}
+
+    public function getUsername(){
+        return $this->email;
+    }
+
+    public function eraseCredentials(){
+
     }
 }
