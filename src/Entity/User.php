@@ -55,6 +55,15 @@ class User implements UserInterface
      */
     private $hash;
 
+/**
+ * @Assert\EqualTo(propertyPath="hash", message="Vous n'avez pas correctement corfirmer votre mot de passe")
+ *
+ * 
+ */
+    public $passwordConfirm;
+
+
+
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=10, minMessage="Votre introduction est trop courte")
