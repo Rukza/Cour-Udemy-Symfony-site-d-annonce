@@ -17,52 +17,82 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 class AdType extends AbstractType
 {
     
+    /**
+     * 
+     *Permet d'avoirr la configuration de base d'un champ
+     * @param string $label
+     * @param string $placeholder
+     * @return array
+     */
+    private function getConfiguration($label, $placeholder){
+        return [
+            'label' => $label,
+            'attr'  =>[
+                'placeholder' => $placeholder
+            ]
+            ];
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title',
-             TextType::class,
-              $this->getConfiguration("Titre","Tapez un super titre pour votre annonce"))
+            ->add(
+                'title',
+                TextType::class,
+                $this->getConfiguration("Titre","Tapez un super titre pour votre annonce")
+            )
 
-            ->add('slug',
-             TextType::class,
-              $this->getConfiguration("Adresse web","Tapez l'adresse web (automatique)", [
-                  'required' => false
-              ]))
+            ->add(
+                'slug',
+                TextType::class,
+                $this->getConfiguration("Adresse web","Tapez l'adresse web (automatique)", [
+                  'required' => false])
+            )
 
-            ->add('coverImage',
-            UrlType::class,
-             $this->getConfiguration("Url","Url de l'image principale"))
+            ->add(
+                'coverImage',
+                UrlType::class,
+                $this->getConfiguration("Url","Url de l'image principale")
+            )
 
-            ->add('introduction',
-             TextType::class,
-            $this->getConfiguration("Introduction", "Donnez une description globale de l'annonce"))
+            ->add(
+                'introduction',
+                TextType::class,
+                $this->getConfiguration("Introduction", "Donnez une description globale de l'annonce")
+            )
 
-            ->add('content',
+            ->add(
+                'content',
              TextareaType::class,
-             $this->getConfiguration("Description de l'annonce","Description détaillée de votre annonce"))
+             $this->getConfiguration("Description de l'annonce","Description détaillée de votre annonce")
+            )
 
-            ->add('rooms',
+            ->add(
+                'rooms',
              IntegerType::class,
-             $this->getConfiguration("Ajouter le nombres de chambres","Nombres de chambres"))
+             $this->getConfiguration("Ajouter le nombres de chambres","Nombres de chambres")
+            )
 
-            ->add('price',
-             MoneyType::class,
-            $this->getConfiguration("Prix par nuit", "indiquez le prix que vous voulez pour un nuit"))
+            ->add(
+                'price',
+                MoneyType::class,
+                $this->getConfiguration("Prix par nuit", "indiquez le prix que vous voulez pour un nuit")
+            )
 
         
-        ->add('images',
+            ->add(
+                'images',
                 CollectionType::class,
                 [
                     'entry_type' => ImageType::class,
                     'allow_add'  => true,
-                    'allow_delete'  => true
+                    'allow_delete'  => true,
                 ]
              
              
-        )
+            )
         
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

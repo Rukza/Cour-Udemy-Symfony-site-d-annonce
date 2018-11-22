@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
             $user = new User();
 
             $genre = $faker->randomElement($genres);
-            $picture = 'https://randomuser.me/api/portraits';
+            $picture = 'https://randomuser.me/api/portraits/';
             $pictureId = $faker->numberBetween(1, 99). '.jpg';
 
             $hash = $this->encoder->encodePassword($user, 'password');

@@ -85,6 +85,13 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Ad", mappedBy="author")
      */
     private $ads;
+    //Mise en place d'une fonction pour avoir le nom complet et simplifier le code
+    public function getFullName(){
+        return "{$this->firstName} {$this->lastName}";
+    }
+
+
+
     /**
      * Permet d'initialiser le slug
      * @ORM\PrePersist
