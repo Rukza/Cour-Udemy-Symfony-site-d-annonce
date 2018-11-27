@@ -22,11 +22,11 @@
                         {{ form_row(form.endDate)}}
                     </div>
                 </div>
-            </div>
-            <h4>Montant du séjour : <span id="amout">...</span> &euro;</h4>
-            <span id="days">0</span> nuit(s) à {{ ad.price }} / nuit
-            <h2>Laisser votre commentaire</h2>
+            <h4>Montant du séjour : <span id="amount">...</span> &euro;</h4>
+            <span id="days">0</span> nuit(s) à {{ ad.price }} / nuit(s)
+            <h4 class="mt-3">Laisser votre commentaire</h4>
             {{ form_row(form.comment)}}
+            </div>
 
             <button type="submit" class="btn btn-success">Je réserve</button>
         {{ form_end(form) }}
@@ -39,7 +39,39 @@
 
 <script>
     $(document).ready(function(){
-        $('#booking_startDate, #booking_endDate').datepicker();
-    })
+        $('#booking_startDate, #booking_endDate').datepicker({
+            format:'dd/mm/yyyy',
+            datesDisabled:[
+                {% for day in ad.notAvailableDays %}
+                    "{{ day.format('d/m/Y')}}",
+                {% endfor %}
+            ],
+            startDate: new Date()
+        });
+        $('#booking_startDate, #booking_endDate').on('change', calculateAmount);
+    });
+
+    function calculateAmount(){
+        const endDate = new Date($('#booking_endDate').val().replace(/(\d+)\/(\d+)\/(\d{4})/,'$3-$2-$1'));
+        //regex pour transformer les dates d/m/y en y-m-d
+        const startDate = new Date($('#booking_startDate').val().replace(/(\d+)\/(\d+)\/(\d{4})/,'$3-$2-$1'));
+
+
+        if(startDate && endDate && startDate < endDate){
+
+            const DAY_TIME = 24 * 60 * 60 *1000;
+
+            const interval = endDate.getTime() - startDate.getTime();
+            const days = interval / DAY_TIME;
+            const amount = days * {{ad.price}};
+
+            $('#days').text(days); //cible la balise days pour lui faire afficher la cont days
+            $('#amount').text(amount.toLocaleString('fr-FR'));
+        }
+
+
+
+    }
+
 </script>
 {% endblock %}
